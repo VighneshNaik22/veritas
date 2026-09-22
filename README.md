@@ -106,7 +106,6 @@ exact normalized email address submitted in that login request, not to a fixed
 demo address.
 
 OTP security behavior:
-
 - Six-digit random code
 - Five-minute expiration
 - Single-use challenge
