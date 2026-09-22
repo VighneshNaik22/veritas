@@ -344,4 +344,4 @@ VERITAS rejects them:
 VERITAS executes refund steps, checks their real database effects independently,
 records tamper-evident evidence, detects lies and unexpected changes, preserves
 work during outages, automatically reconciles after reconnect, and exposes the
-results through an OTP-protected web dashboard.
+results through an OTP-Protected web dashboard.
