@@ -1,0 +1,5 @@
+veritas.db
+veritas_ledger.db
+test_ledger.db
+__pycache__/
+*.pyc
