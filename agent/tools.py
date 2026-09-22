@@ -1,5 +1,6 @@
 import datetime
 from shared.contracts import new_id
+from harness import network_status
 
 def check_eligibility(rw_conn, args):
     row = rw_conn.execute("SELECT eligible FROM customers WHERE customer_id=?",
@@ -25,7 +26,24 @@ def update_refund_db(rw_conn, args):
     rw_conn.commit()
     return {"status": "success"}
 
-def send_confirmation_email(rw_conn, args):
+def send_confirmation_email(rw_conn, args, online_check=None):
+    if online_check is None:
+        online_check = network_status.is_online
+    if not online_check():
+        rw_conn.execute(
+            "INSERT INTO outbox "
+            "(outbox_id, customer_id, refund_id, subject, queued_at) "
+            "VALUES (?,?,?,?,?)",
+            (
+                new_id("OUTBOX"),
+                args["customer_id"],
+                args["refund_id"],
+                "Your refund is processed",
+                datetime.datetime.utcnow().isoformat(),
+            ),
+        )
+        rw_conn.commit()
+        return {"status": "queued_offline"}
     rw_conn.execute(
         "INSERT INTO sent_emails (email_id, customer_id, refund_id, subject, sent_at) "
         "VALUES (?,?,?,?,?)",

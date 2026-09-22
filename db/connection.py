@@ -14,7 +14,9 @@ def build_fresh_world():
     conn.close()
 
 def get_rw_conn():
-    return sqlite3.connect(DB_PATH)
+    return sqlite3.connect(DB_PATH, check_same_thread=False)
 
 def get_ro_conn():
-    return sqlite3.connect(f"file:{DB_PATH}?mode=ro", uri=True)
+    return sqlite3.connect(
+        f"file:{DB_PATH}?mode=ro", uri=True, check_same_thread=False
+    )

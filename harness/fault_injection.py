@@ -35,5 +35,8 @@ class FaultInjector:
                                claim=f"{contract.name} completed successfully.", raw=raw)
 
         raw = tool_fn(rw_conn, contract.args)
+        claim = (f"{contract.name} queued_offline."
+                 if raw.get("status") == "queued_offline"
+                 else f"{contract.name} completed successfully.")
         return ToolResult(contract.step_id,
-                           claim=f"{contract.name} completed successfully.", raw=raw)
+                           claim=claim, raw=raw)

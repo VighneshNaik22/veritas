@@ -1,0 +1,4 @@
+- id: no_delete_before_backup
+  description: "No step named delete_* may run unless a step named backup_* appears earlier in the plan."
+- id: every_step_has_expected
+  description: "Every StepContract must have a non-empty expected dict."

@@ -15,6 +15,7 @@ class StepStatus(str, Enum):
     VERIFIED = "VERIFIED"
     FAILED = "FAILED"
     BLOCKED = "BLOCKED"
+    STALE = "STALE"
 
 
 class RunStatus(str, Enum):
@@ -64,6 +65,7 @@ class Evidence:
     details: dict[str, Any]
     prev_hash: str
     hash: str
+    trust_level: str = "SOFT"
 
 
 @dataclass

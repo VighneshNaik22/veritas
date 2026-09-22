@@ -7,8 +7,10 @@ class DagRunner:
         self.verifier = verifier
         self.classifier = classifier
         self.recovery = recovery_engine
+        self._contracts: dict = {}
 
     def run(self, plan: list) -> dict:
+        self._contracts = {contract.step_id: contract for contract in plan}
         results: dict[str, StepResult] = {}
         for contract in plan:
             upstream_ok = all(
@@ -22,6 +24,17 @@ class DagRunner:
                 continue
             results[contract.step_id] = self._run_step(contract)
         return results
+
+    def mark_stale(self, step_id, results) -> bool:
+        result = results.get(step_id)
+        contract = self._contracts.get(step_id)
+        if result is None or contract is None or result.status != StepStatus.VERIFIED:
+            return False
+        evidence = self.verifier.verify(contract)
+        if evidence.details != (result.evidence.details if result.evidence else None):
+            result.status = StepStatus.STALE
+            return True
+        return False
 
     def _run_step(self, contract) -> StepResult:
         attempts = 0

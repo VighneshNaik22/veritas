@@ -17,13 +17,13 @@ DEMO_PLAN = [
         step_id="step_3", name="send_confirmation_email", depends_on=["step_2"],
         tool="send_confirmation_email",
         args={"customer_id": "C123", "refund_id": "R123"},
-        expected={}, idempotency_key="email-R123",
+        expected={"row_count": 1}, idempotency_key="email-R123",
         reversible=False,
     ),
     StepContract(
         step_id="step_4", name="log_audit", depends_on=["step_3"],
         tool="log_audit",
         args={"step_id": "refund_flow", "message": "refund R123 processed and emailed"},
-        expected={}, idempotency_key="audit-refund_flow",
+        expected={"row_count": 1}, idempotency_key="audit-refund_flow",
     ),
 ]
